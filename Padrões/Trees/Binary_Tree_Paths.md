@@ -1,33 +1,28 @@
 # Binary_Tree_Paths
 https://leetcode.com/problems/binary-tree-paths
 
-TO-DO: Otimizar. Ao invés de utilizar uma lista encadeada, utilizar o próprio StringBuilder e remover do stringbuilder após um path for descoberto. O truque é salvar o tamanho do stringbuilder no inicio do método e após a conclusão setar esse mesmo tamanho
+O DFS é o algoritmo ideal para esse caso, uma vez que ele lista todos os caminhos da raiz até a folha e só retrocede quando um caminho é finalizado. A única alteração nesse caso é utilizar um StringBuilder para diminuir a quantidade de Strings instanciadas. Assim que um nó é totalmente processado, o seu valor é removido do StringBuilder para que o próximo caminho não o utilize.
 ```Java
-class Solution {
-
-    private void buildAllPaths(TreeNode root, LinkedList<Integer> path, List<String> paths){
+class Solution { 
+    private void buildAllPaths(TreeNode root, StringBuilder currentPath, List<String> paths){
         if(root == null) return;
-        path.add(root.val);
+        int size = currentPath.length();
         if(root.left == null && root.right == null){
-            boolean first = true;
-            StringBuilder sb = new StringBuilder();
-            for(Integer num: path) {
-                if(!first) sb.append("->");
-                sb.append(String.valueOf(num));
-                first = false;                
-            }
-            paths.add(sb.toString());   
-            path.removeLast();            
-            return;
-        }        
-        buildAllPaths(root.left, path, paths);
-        buildAllPaths(root.right, path, paths);    
-        path.removeLast();    
+            currentPath.append(root.val);
+            paths.add(currentPath.toString());
+        }else{
+            currentPath.append(root.val);
+            currentPath.append("->");            
+            buildAllPaths(root.left, currentPath, paths);
+            buildAllPaths(root.right, currentPath, paths);
+        }    
+        currentPath.setLength(size);
     }
 
-    public List<String> binaryTreePaths(TreeNode root) {
+    public List<String> binaryTreePaths(TreeNode root) {    
         List<String> paths = new ArrayList<>();
-        buildAllPaths(root, new LinkedList<>(), paths);
+        StringBuilder currentPath = new StringBuilder();
+        buildAllPaths(root, currentPath, paths);
         return paths;
     }
 }
