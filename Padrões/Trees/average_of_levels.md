@@ -1,4 +1,4 @@
-637. Average of Levels in Binary Tree
+# 637. Average of Levels in Binary Tree
 https://leetcode.com/problems/average-of-levels-in-binary-tree
 
 A solução é basicamente usar um BFS, já que o problema pede a média por nível. Porém, o BFS por si só não informa qual o nível que está sendo processado, para isso, é necessário o seguinte ajuste: Consultar o tamanho da fila a cada iteração e remover essa quantidade de elementos por vez. Dessa forma, cada iteração sempre estará processando todos os nós de um nível, visto que, no início do loop, somente nós do mesmo nível estão na fila.
